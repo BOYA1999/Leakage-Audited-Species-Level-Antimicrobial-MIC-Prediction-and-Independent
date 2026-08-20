@@ -142,4 +142,3 @@ fingerprint and standardized-parent audits.
 
 The code supports retrospective molecular ranking and uncertainty analysis. The Maier data are an external fixed-concentration phenotypic screen, not clinical MIC validation. Model scores do not establish prospective antimicrobial activity, experimental safety, pharmacokinetics, mechanism, patentability, or clinical efficacy.
 
-No project license has been selected in this package. Add an author-approved license before public release.
