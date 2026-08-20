@@ -13,7 +13,6 @@ The workflow covers:
 - pooled-versus-species-wise coverage audits, a secondary post hoc MIC replicate/IQR audit, paired bootstrap comparisons, and publication-figure generation;
 - endpoint-specific E. coli exact-key, fingerprint-identity, and standardized-parent-identity audits.
 
-This is a code-only public package. Raw datasets, result tables, manuscripts, figures, model weights, embeddings, checkpoints, and local run manifests are intentionally excluded.
 
 ## Layout
 
