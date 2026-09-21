@@ -120,8 +120,16 @@ def coverage_audit(species_dir: Path, output: Path) -> None:
     predictions = pd.read_csv(species_dir / "predictions.csv.gz")
     by_seed = []
     by_species = []
+    weighting_rows = []
     for (model, seed), frame in predictions.groupby(["model", "seed"], sort=True):
         covered = frame["y_true"].between(frame["lower_90"], frame["upper_90"])
+        compound_coverage = covered.groupby(frame["compound_inchikey"]).mean()
+        weighting_rows.append({
+            "model": model, "seed": int(seed), "test_pairs": len(frame),
+            "test_compounds": len(compound_coverage),
+            "pair_weighted_coverage": float(covered.mean()),
+            "equal_compound_coverage": float(compound_coverage.mean()),
+        })
         species = []
         for organism, group in frame.groupby("organism", sort=True):
             species_covered = group["y_true"].between(group["lower_90"], group["upper_90"])
@@ -176,6 +184,31 @@ def coverage_audit(species_dir: Path, output: Path) -> None:
         )
     )
     summary.to_csv(output / "species_mic_coverage_summary.csv", index=False)
+    weighting = pd.DataFrame(weighting_rows)
+    weighting.to_csv(output / "coverage_weighting_by_seed.csv", index=False)
+    weighting.groupby("model", as_index=False).agg(
+        pair_weighted_mean=("pair_weighted_coverage", "mean"),
+        pair_weighted_sd=("pair_weighted_coverage", "std"),
+        equal_compound_mean=("equal_compound_coverage", "mean"),
+        equal_compound_sd=("equal_compound_coverage", "std"),
+        seeds=("seed", "count"),
+    ).to_csv(output / "coverage_weighting_summary.csv", index=False)
+
+
+def full_vs_maccs_audit(species_ablation_dir: Path, output: Path) -> None:
+    metrics = pd.read_csv(species_ablation_dir / "metrics.csv")
+    macro = metrics.loc[metrics["scope"].eq("macro")]
+    rows, seed_rows = [], []
+    for metric in METRICS[:5]:
+        wide = macro.pivot(index="seed", columns="model", values=metric)
+        delta = wide["multiview"] - wide["morgan_maccs"]
+        low, high = confidence_interval(delta.to_numpy())
+        favorable = delta < 0 if metric in {"mae", "rmse"} else delta > 0
+        rows.append({"metric": metric, "mean_difference": delta.mean(), "ci_low": low,
+                     "ci_high": high, "favorable_splits": int(favorable.sum()), "seeds": len(delta)})
+        seed_rows.extend({"metric": metric, "seed": int(seed), "difference": value} for seed, value in delta.items())
+    pd.DataFrame(rows).to_csv(output / "full_vs_maccs_paired.csv", index=False)
+    pd.DataFrame(seed_rows).to_csv(output / "full_vs_maccs_by_seed.csv", index=False)
 
 
 def conditioning_conformal_audit(conditioning_dir: Path, output: Path) -> None:
@@ -276,6 +309,14 @@ def supplementary_species_table(species_dir: Path, output: Path) -> None:
     table = table.sort_values(["pathogen_class", "organism"]).reset_index(drop=True)
     table.to_csv(output / "supplementary_table_s1_species.csv", index=False)
 
+    comparison = performance.loc[performance["model"].isin(LEARNED_MODELS)].pivot(
+        index="organism", columns="model", values="mae"
+    )[LEARNED_MODELS].add_suffix("_mae")
+    comparison = table[["organism", "compound_species_pairs"]].merge(
+        comparison, on="organism", validate="one_to_one"
+    ).rename(columns={"organism": "species"}).sort_values("species")
+    comparison.to_csv(output / "pretrained_species_comparison.csv", index=False)
+
 
 def sha256_file(path: Path) -> str:
     digest = sha256()
@@ -283,6 +324,27 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def external_species_crosswalk(species_dir: Path, maier_dir: Path, mapping_path: Path, output: Path) -> None:
+    manifest = json.loads((maier_dir / "manifest.json").read_text(encoding="utf-8"))
+    columns = pd.read_csv(manifest["maier_screen"], sep="\t", nrows=0).columns[1:]
+    mapping = pd.read_csv(mapping_path)
+    table = pd.DataFrame({"source_strain": columns}).merge(mapping, on="source_strain", how="left", validate="one_to_one")
+    if table["accepted_tax_id"].isna().any():
+        raise ValueError("Every external strain requires a verified species mapping")
+    internal_manifest = json.loads((species_dir / "manifest.json").read_text(encoding="utf-8"))
+    pairs = pd.read_csv(internal_manifest["data"], usecols=["tax_id", "compound_inchikey"])
+    counts = pairs.groupby("tax_id")["compound_inchikey"].nunique()
+    table["in_internal_benchmark"] = table["accepted_tax_id"].isin(counts.index)
+    table["internal_compounds"] = table["accepted_tax_id"].map(counts).fillna(0).astype(int)
+    table["single_species_refit_analyzed"] = table["accepted_tax_id"].eq(562)
+    table["analysis_reason"] = np.select(
+        [table["single_species_refit_analyzed"], table["in_internal_benchmark"]],
+        ["Original selected E. coli case study", "Additional match identified during revision; not analyzed"],
+        default="Not in the 48-species benchmark",
+    )
+    table.to_csv(output / "maier_species_crosswalk.csv", index=False)
 
 
 def reproducibility_tables(species_dir: Path, maier_dir: Path, output: Path, source_revision: str | None) -> None:
@@ -319,6 +381,7 @@ def reproducibility_tables(species_dir: Path, maier_dir: Path, output: Path, sou
         ("Graph summary", "n_rings", "mol.GetRingInfo().NumRings()"),
         ("Graph summary", "n_aromatic_rings", "rdMolDescriptors.CalcNumAromaticRings(mol)"),
         ("Graph summary", "largest_ring_size", "Maximum atom-ring length from mol.GetRingInfo().AtomRings(); 0 if no ring"),
+        ("External concentration conversion", "ExactMolWt", "RDKit Descriptors.ExactMolWt(Chem.MolFromSmiles(pchem_canonical_smile)); used as g/mol in the 20 micromolar concentration conversion before salt removal"),
     ]
     pd.DataFrame(feature_rows, columns=["block", "feature", "exact_function_or_definition"]).to_csv(
         output / "handcrafted_feature_definitions.csv", index=False
@@ -332,6 +395,10 @@ def reproducibility_tables(species_dir: Path, maier_dir: Path, output: Path, sou
         ("Parent step 3", "rdMolStandardize.Uncharger().uncharge"),
         ("Parent step 4", "Chem.MolToSmiles(canonical=True, isomericSmiles=True/False)"),
         ("Parent tautomer handling", "No tautomer canonicalization"),
+        ("LightGBM regression", f"objective=L1; n_estimators={species_manifest['n_estimators']}; learning_rate=0.05; num_leaves=63; subsample=0.8; subsample_freq=1; colsample_bytree=0.8; reg_lambda=1.0"),
+        ("Species-balanced weights", "Inverse training-species frequency normalized to mean 1"),
+        ("MolE embedding", "Public GIN-concat checkpoint; frozen inference; 1000 dimensions"),
+        ("MoLFormer embedding", "IBM MoLFormer-XL; BF16; batch size 64; maximum token length 202; frozen inference; 768 dimensions"),
     ]
     pd.DataFrame(settings, columns=["component", "exact_setting"]).to_csv(
         output / "representation_and_parent_settings.csv", index=False
@@ -377,6 +444,9 @@ def reproducibility_tables(species_dir: Path, maier_dir: Path, output: Path, sou
         "ecoli_columns": ecoli_columns,
         "ecoli_rule": "positive if max of the two source-supplied E. coli binary labels equals 1",
         "threshold_fitted": False,
+        "upstream_label_definition": "Adjusted P <= 0.05 in the Maier source screening table; binary conversion inherited from the MolE preparation workflow",
+        "upstream_label_source": "workflow/01.prepare_training_data.ipynb; PVAL_CUTOFF=0.05; screen_df <= PVAL_CUTOFF",
+        "precision_recall_summary": "sklearn.metrics.average_precision_score; average precision (AP), reported as AUPRC",
         "missing_value_rule": "not applicable: no missing strain-level labels",
         "duplicate_rule": "not applicable: one-to-one IDs in both source tables",
     }
@@ -389,8 +459,10 @@ def view_ablation_uncertainty(
     output: Path,
     bootstrap: int,
     seed: int,
+    paired_external: pd.DataFrame,
 ) -> None:
     models = ["morgan", "morgan_physchem", "morgan_maccs", "morgan_graph", "multiview"]
+    full_vs_maccs_audit(species_ablation_dir, output)
     macro = pd.read_csv(species_ablation_dir / "metrics.csv").loc[lambda frame: frame["scope"].eq("macro")]
     reference = macro.loc[macro["model"].eq("morgan")].set_index("seed")["mae"]
     rows = []
@@ -444,6 +516,17 @@ def view_ablation_uncertainty(
                         "resamples_or_seeds": bootstrap,
                     }
                 )
+    canonical = paired_external.loc[
+        paired_external["cohort"].eq("primary_exact_key_nonoverlap")
+        & paired_external["comparison"].eq("multiview_minus_morgan")
+    ].set_index(["endpoint", "metric"])
+    for row in rows:
+        if row["representation"] == "multiview" and row["scope"].startswith("Maier"):
+            endpoint = "any_activity" if row["scope"] == "Maier broad primary" else "ecoli_any_activity"
+            match = canonical.loc[(endpoint, row["metric"])]
+            np.testing.assert_allclose(row["difference_vs_morgan"], match["difference"], rtol=0, atol=1e-12)
+            row["difference_ci_low"] = match["ci_low"]
+            row["difference_ci_high"] = match["ci_high"]
     pd.DataFrame(rows).to_csv(output / "view_ablation_uncertainty.csv", index=False)
 
 
@@ -694,15 +777,7 @@ def run(args: argparse.Namespace) -> None:
     species_dir = Path(args.species_dir)
     maier_dir = Path(args.maier_dir)
     reproducibility_tables(species_dir, maier_dir, output, args.maier_source_revision)
-    if args.species_ablation_dir and args.maier_ablation_dir:
-        view_ablation_uncertainty(
-            Path(args.species_ablation_dir),
-            Path(args.maier_ablation_dir),
-            output,
-            args.bootstrap,
-            args.seed,
-        )
-
+    external_species_crosswalk(species_dir, maier_dir, Path(args.maier_taxonomy_mapping), output)
     metrics = pd.read_csv(species_dir / "metrics.csv")
     macro = metrics.loc[metrics["scope"].eq("macro")].copy()
     summary_rows = []
@@ -906,6 +981,15 @@ def run(args: argparse.Namespace) -> None:
         bootstrap_rows.extend(rows)
     paired_bootstrap_frame = pd.DataFrame(bootstrap_rows)
     paired_bootstrap_frame.to_csv(output / "maier_paired_bootstrap_differences.csv", index=False)
+    if args.species_ablation_dir and args.maier_ablation_dir:
+        view_ablation_uncertainty(
+            Path(args.species_ablation_dir),
+            Path(args.maier_ablation_dir),
+            output,
+            args.bootstrap,
+            args.seed,
+            paired_bootstrap_frame,
+        )
     ecoli_cohort_summary(ecoli, paired_bootstrap_frame, output)
 
     audit = {
@@ -944,6 +1028,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--species-ablation-dir")
     parser.add_argument("--maier-ablation-dir")
     parser.add_argument("--maier-source-revision")
+    parser.add_argument("--maier-taxonomy-mapping", default=str(Path(__file__).resolve().parents[1] / "docs" / "maier_taxonomy_mapping.csv"))
     parser.add_argument("--output", default="paper/tables/species_mic_v2")
     parser.add_argument("--bootstrap", type=int, default=5000)
     parser.add_argument("--seed", type=int, default=20260809)

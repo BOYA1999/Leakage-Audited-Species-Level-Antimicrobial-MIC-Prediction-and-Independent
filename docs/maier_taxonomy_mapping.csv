@@ -1,0 +1,41 @@
+source_strain,canonical_species,accepted_tax_id,taxonomy_source,retrieved
+Akkermansia muciniphila (NT5021),Akkermansia muciniphila,239935,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=239935&mode=Info,2026-09-08
+Bacteroides caccae (NT5050),Bacteroides caccae,47678,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=47678&mode=Info,2026-09-08
+Bacteroides fragilis (ET) (NT5033),Bacteroides fragilis,817,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=817&mode=Info,2026-09-08
+Bacteroides fragilis (NT) (NT5003),Bacteroides fragilis,817,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=817&mode=Info,2026-09-08
+Bacteroides ovatus (NT5054),Bacteroides ovatus,28116,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=28116&mode=Info,2026-09-08
+Bacteroides thetaiotaomicron (NT5004),Bacteroides thetaiotaomicron,818,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=818&mode=Info,2026-09-08
+Bacteroides uniformis (NT5002),Bacteroides uniformis,820,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=820&mode=Info,2026-09-08
+Bacteroides vulgatus (NT5001),Phocaeicola vulgatus,821,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=821&mode=Info,2026-09-08
+Bacteroides xylanisolvens (NT5064),Bacteroides xylanisolvens,371601,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=371601&mode=Info,2026-09-08
+Bifidobacterium adolescentis (NT5022),Bifidobacterium adolescentis,1680,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1680&mode=Info,2026-09-08
+Bifidobacterium longum (NT5028),Bifidobacterium longum,216816,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=216816&mode=Info,2026-09-08
+Bilophila wadsworthia (NT5036),Bilophila wadsworthia,35833,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=35833&mode=Info,2026-09-08
+Blautia obeum (NT5069),Blautia obeum,40520,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=40520&mode=Info,2026-09-08
+Clostridium bolteae (NT5026),Enterocloster bolteae,208479,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=208479&mode=Info,2026-09-08
+Clostridium difficile (NT5083),Clostridioides difficile,1496,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1496&mode=Info,2026-09-08
+Clostridium perfringens (NT5032),Clostridium perfringens,1502,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1502&mode=Info,2026-09-08
+Clostridium ramosum (NT5006),Thomasclavelia ramosa,1547,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1547&mode=Info,2026-09-08
+Clostridium saccharolyticum (NT5037),Lacrimispora saccharolytica,84030,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=84030&mode=Info,2026-09-08
+Collinsella aerofaciens (NT5073),Collinsella aerofaciens,74426,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=74426&mode=Info,2026-09-08
+Coprococcus comes (NT5048),Allocoprococcus comes,410072,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=410072&mode=Info,2026-09-08
+Dorea formicigenerans (NT5076),Dorea formicigenerans,39486,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=39486&mode=Info,2026-09-08
+Eggerthella lenta (NT5024),Eggerthella lenta,84112,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=84112&mode=Info,2026-09-08
+Escherichia coli ED1a (NT5078),Escherichia coli,562,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=562&mode=Info,2026-09-08
+Escherichia coli IAI1 (NT5077),Escherichia coli,562,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=562&mode=Info,2026-09-08
+Eubacterium eligens (NT5075),Lachnospira eligens,39485,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=39485&mode=Info,2026-09-08
+Eubacterium rectale (NT5009),Agathobacter rectalis,39491,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=39491&mode=Info,2026-09-08
+Fusobacterium nucleatum (NT5025),Fusobacterium nucleatum,851,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=851&mode=Info,2026-09-08
+Lactobacillus paracasei (NT5042),Lacticaseibacillus paracasei,1597,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1597&mode=Info,2026-09-08
+Odoribacter splanchnicus (NT5081),Odoribacter splanchnicus,28118,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=28118&mode=Info,2026-09-08
+Parabacteroides distasonis (NT5074),Parabacteroides distasonis,823,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=823&mode=Info,2026-09-08
+Parabacteroides merdae (NT5071),Parabacteroides merdae,46503,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=46503&mode=Info,2026-09-08
+Prevotella copri (NT5019),Segatella copri,165179,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=165179&mode=Info,2026-09-08
+Roseburia hominis (NT5079),Roseburia hominis,301301,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=301301&mode=Info,2026-09-08
+Roseburia intestinalis (NT5011),Roseburia intestinalis,166486,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=166486&mode=Info,2026-09-08
+Ruminococcus bromii (NT5045),Ruminococcus bromii,40518,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=40518&mode=Info,2026-09-08
+Ruminococcus gnavus (NT5046),Mediterraneibacter gnavus,33038,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=33038&mode=Info,2026-09-08
+Ruminococcus torques (NT5047),Mediterraneibacter torques,33039,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=33039&mode=Info,2026-09-08
+Streptococcus parasanguinis (NT5072),Streptococcus parasanguinis,1318,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1318&mode=Info,2026-09-08
+Streptococcus salivarius (NT5038),Streptococcus salivarius,1304,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1304&mode=Info,2026-09-08
+Veillonella parvula (NT5017),Veillonella parvula,29466,https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=29466&mode=Info,2026-09-08

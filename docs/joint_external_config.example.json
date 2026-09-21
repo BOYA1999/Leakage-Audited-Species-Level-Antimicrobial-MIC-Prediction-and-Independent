@@ -1,0 +1,14 @@
+{
+  "species_dir": "results/species_mic",
+  "ablation_dir": "results/species_ablation",
+  "legacy_external_dir": "results/maier",
+  "taxonomy_mapping": "docs/maier_taxonomy_mapping.csv",
+  "output_dir": "results/joint_external",
+  "seeds": [42, 100, 3544, 2025, 2026],
+  "representations": ["multiview", "morgan", "morgan_maccs"],
+  "n_estimators": 300,
+  "n_jobs": 12,
+  "bootstrap": 5000,
+  "bootstrap_seed": 20260908,
+  "replay_absolute_tolerance": 0.000001
+}

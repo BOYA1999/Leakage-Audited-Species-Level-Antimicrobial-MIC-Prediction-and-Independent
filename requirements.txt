@@ -1,10 +1,13 @@
+chemprop==2.2.4
 lightgbm
 matplotlib
 numpy
 pandas
+pillow
 pytest
 rdkit
 scikit-learn
 scipy
 torch
 transformers
+xgboost==3.3.0
