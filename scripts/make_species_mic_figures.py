@@ -532,7 +532,7 @@ def figure6(species_dir: Path, table_dir: Path, output_dir: Path, source_dir: Pa
     species = pd.read_csv(table_dir / "supplementary_table_s1_species.csv")
 
     fig, axes = plt.subplots(2, 2, figsize=(8.2, 5.45))
-    headline(fig, "Near-nominal empirical coverage requires wide prediction intervals")
+    headline(fig, "Near-nominal empirical coverage coincided with wide prediction intervals")
 
     handles = []
     for _, row in coverage.iterrows():
@@ -567,7 +567,7 @@ def figure6(species_dir: Path, table_dir: Path, output_dir: Path, source_dir: Pa
     axes[0, 1].set_xticks(x, metric_labels, rotation=18, ha="right")
     axes[0, 1].set_ylim(0.65, 0.93)
     axes[0, 1].set_ylabel("Coverage")
-    axes[0, 1].set_title("Naive species-wise calibration lowers tail coverage", loc="left")
+    axes[0, 1].set_title("Species-wise calibration had lower tail coverage", loc="left")
     axes[0, 1].legend(frameon=False, loc="lower left")
     clean_axis(axes[0, 1], "y")
     panel_label(axes[0, 1], "B")
@@ -588,7 +588,7 @@ def figure6(species_dir: Path, table_dir: Path, output_dir: Path, source_dir: Pa
     axes[1, 0].set_xlabel("Pooled-calibration species coverage")
     axes[1, 0].set_ylabel("Species-wise-calibration coverage")
     worse = int((per_species["specieswise_coverage"] < per_species["pooled_coverage"]).sum())
-    axes[1, 0].set_title(f"Species-wise coverage decreases for {worse}/48 organisms", loc="left")
+    axes[1, 0].set_title(f"Species-wise coverage was lower for {worse}/48 organisms", loc="left")
     clean_axis(axes[1, 0], "both")
     panel_label(axes[1, 0], "C")
 
@@ -624,7 +624,7 @@ def figure7(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     topk = pd.read_csv(table_dir / "maier_topk_enrichment.csv")
 
     fig, axes = plt.subplots(2, 2, figsize=(8.2, 5.45))
-    headline(fig, "Multi-view transfers to broad Maier activity and enriches top-ranked compounds under overlap audits")
+    headline(fig, "Observed broad-activity ranking and top-k enrichment in the Maier cohort")
 
     models = ["morgan", "multiview", "mole", "molformer"]
     primary = metrics.loc[metrics["cohort"].eq("primary_exact_key_nonoverlap")].set_index("model")
@@ -669,7 +669,7 @@ def figure7(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     axes[0, 1].set_yticks(y_base, list(cohort_map.values()))
     axes[0, 1].invert_yaxis()
     axes[0, 1].set_xlabel("Multi-view - Morgan")
-    axes[0, 1].set_title("Paired advantage persists after stricter overlap removal", loc="left")
+    axes[0, 1].set_title("Paired differences after stricter overlap removal", loc="left")
     axes[0, 1].legend(frameon=False, loc="upper left")
     clean_axis(axes[0, 1], "x")
     panel_label(axes[0, 1], "B")
@@ -696,7 +696,7 @@ def figure7(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     axes[1, 0].set_ylim(0.30, 1.05)
     axes[1, 0].set_xlabel("Top k compounds")
     axes[1, 0].set_ylabel("Observed active fraction")
-    axes[1, 0].set_title("Top-ranked multi-view compounds are enriched for actives", loc="left")
+    axes[1, 0].set_title("Observed active fraction among top-ranked compounds", loc="left")
     clean_axis(axes[1, 0], "y")
     panel_label(axes[1, 0], "C")
 
@@ -731,7 +731,7 @@ def figure8(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     bins = ["<0.30", "0.30-0.50", "0.50-0.70", ">=0.70"]
 
     fig, axes = plt.subplots(2, 2, figsize=(8.2, 6.4))
-    headline(fig, "External transfer depends on chemical context, species and metric")
+    headline(fig, "External ranking differed by chemical context, species and metric")
 
     composition = similarity.loc[similarity["model"].eq("morgan")].set_index("similarity_bin").loc[bins].reset_index()
     inactive = composition["n"] - composition["positives"]
@@ -744,7 +744,7 @@ def figure8(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     axes[0, 0].set_xlabel("Nearest-training Morgan Tanimoto")
     axes[0, 0].set_ylabel("Compounds")
     axes[0, 0].set_ylim(0, composition["n"].max() * 1.22)
-    axes[0, 0].set_title("Activity prevalence rises with structural proximity", loc="left")
+    axes[0, 0].set_title("Observed activity prevalence by structural proximity", loc="left")
     axes[0, 0].legend(frameon=False, loc="upper right")
     clean_axis(axes[0, 0], "y")
     panel_label(axes[0, 0], "A")
@@ -785,7 +785,7 @@ def figure8(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
         ax.set_ylim(-0.65, 6.65)
         ax.invert_yaxis()
         ax.set_xlabel(f"Joint multi-view - comparator {metric.upper()}")
-        title = "C. difficile gains are confined to AUROC" if metric == "auroc" else "E. coli AP is lower than single-species training"
+        title = "AUROC differences by species" if metric == "auroc" else "E. coli AP was lower than single-species training"
         ax.set_title(title, loc="left")
         clean_axis(ax, "x")
         panel_label(ax, panel)
@@ -801,12 +801,12 @@ def write_catalog(output_dir: Path) -> None:
     claims = [
         (1, "fig1_dataset_curation", "Taxonomy-audited curation yields 48 accepted species and 214,068 MIC pairs."),
         (2, "fig2_scaffold_integrity", "Five compound-level scaffold splits have zero assigned-scaffold leakage and stable support."),
-        (3, "fig3_internal_performance", "Multi-view gives a stable but small average error reduction over Morgan."),
-        (4, "fig4_species_conditioning", "Species identity improves average MIC prediction, but its value varies across organisms."),
+        (3, "fig3_internal_performance", "Multi-view had a stable but small average error difference from Morgan."),
+        (4, "fig4_species_conditioning", "Species-conditioned pipelines had lower average error, with heterogeneous organism-level differences."),
         (5, "fig5_representation_ablation", "Classical views differ by endpoint under a fixed downstream estimator."),
-        (6, "fig6_conformal_uncertainty", "Near-nominal empirical coverage requires wide prediction intervals."),
-        (7, "fig7_maier_broad_transfer", "Multi-view transfers to broad Maier activity and enriches top-ranked compounds under overlap audits."),
-        (8, "fig8_novelty_ecoli_boundary", "External transfer depends on chemical context, species and metric; joint multi-view is not uniformly superior."),
+        (6, "fig6_conformal_uncertainty", "Near-nominal empirical coverage was accompanied by wide prediction intervals."),
+        (7, "fig7_maier_broad_transfer", "Broad-activity ranking and top-k enrichment were observed in the Maier cohort under overlap audits."),
+        (8, "fig8_novelty_ecoli_boundary", "External ranking differed by chemical context, species and metric; joint multi-view was not uniformly superior."),
     ]
     catalog = []
     for number, stem, claim in claims:
