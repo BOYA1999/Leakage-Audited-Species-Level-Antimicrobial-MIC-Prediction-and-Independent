@@ -446,7 +446,7 @@ def reproducibility_tables(species_dir: Path, maier_dir: Path, output: Path, sou
         "threshold_fitted": False,
         "upstream_label_definition": "Adjusted P <= 0.05 in the Maier source screening table; binary conversion inherited from the MolE preparation workflow",
         "upstream_label_source": "workflow/01.prepare_training_data.ipynb; PVAL_CUTOFF=0.05; screen_df <= PVAL_CUTOFF",
-        "precision_recall_summary": "sklearn.metrics.average_precision_score; average precision (AP), reported as AUPRC",
+        "precision_recall_summary": "sklearn.metrics.average_precision_score; average precision (AP); legacy output key: auprc",
         "missing_value_rule": "not applicable: no missing strain-level labels",
         "duplicate_rule": "not applicable: one-to-one IDs in both source tables",
     }

@@ -489,7 +489,7 @@ def figure5(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     axes[1, 0].axvline(0, color=TEXT, linestyle="--", linewidth=1)
     axes[1, 0].set_yticks(y, [VIEW_LABELS[r] for r in external["representation"]])
     axes[1, 0].invert_yaxis()
-    axes[1, 0].set_xlabel("Broad-screen AUPRC difference vs Morgan")
+    axes[1, 0].set_xlabel("Broad-screen AP difference vs Morgan")
     axes[1, 0].set_title("External gain is distributed across compact views", loc="left")
     clean_axis(axes[1, 0], "x")
     panel_label(axes[1, 0], "C")
@@ -642,7 +642,7 @@ def figure7(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
         yerr = np.vstack([np.array(estimates) - lows, np.array(highs) - estimates])
         axes[0, 0].bar(x + (i - 1.5) * width, estimates, width, color=MODEL_COLORS[model],
                        label=MODEL_LABELS[model], yerr=yerr, capsize=2.5)
-    axes[0, 0].set_xticks(x, ["AUROC", "AUPRC"])
+    axes[0, 0].set_xticks(x, ["AUROC", "AP"])
     axes[0, 0].set_ylim(0.45, 0.76)
     axes[0, 0].set_ylabel("Performance")
     axes[0, 0].set_title("Primary exact-key-nonoverlap cohort (n=1,015)", loc="left")
@@ -664,7 +664,8 @@ def figure7(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
         y = y_base + offset
         axes[0, 1].errorbar(subset["difference"], y,
                             xerr=np.vstack([subset["difference"] - subset["ci_low"], subset["ci_high"] - subset["difference"]]),
-                            fmt=marker, color=color, ecolor="#536273", capsize=3, label=metric.upper(), ms=5.5)
+                            fmt=marker, color=color, ecolor="#536273", capsize=3,
+                            label="AP" if metric == "auprc" else "AUROC", ms=5.5)
     axes[0, 1].axvline(0, color=TEXT, linestyle="--", linewidth=1)
     axes[0, 1].set_yticks(y_base, list(cohort_map.values()))
     axes[0, 1].invert_yaxis()
@@ -758,8 +759,8 @@ def figure8(table_dir: Path, output_dir: Path, source_dir: Path) -> None:
     axes[0, 1].set_xticks(x, bins)
     axes[0, 1].set_ylim(0.15, 0.95)
     axes[0, 1].set_xlabel("Nearest-training Morgan Tanimoto")
-    axes[0, 1].set_ylabel("AUPRC / prevalence")
-    axes[0, 1].set_title("Similarity-stratified AUPRC is descriptive, not causal", loc="left")
+    axes[0, 1].set_ylabel("AP / prevalence")
+    axes[0, 1].set_title("Similarity-stratified AP is descriptive, not causal", loc="left")
     axes[0, 1].legend(frameon=False, ncol=2, loc="upper left")
     clean_axis(axes[0, 1], "y")
     panel_label(axes[0, 1], "B")

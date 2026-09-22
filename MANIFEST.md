@@ -20,6 +20,7 @@ Included:
 - `scripts/analyze_species_mic_results.py`
 - `scripts/make_species_mic_figures.py`
 - `scripts/analyze_jcim_revision.py`
+- `scripts/analyze_cbc_interactions.py`
 - `scripts/make_jcim_model_benchmark_figure.py`
 - `scripts/make_jcim_reliability_figure.py`
 - `scripts/make_jcim_revision_figures_3_5.py`
@@ -51,4 +52,4 @@ Excluded:
 
 The author-owned repository software is distributed under the included MIT `LICENSE`. Third-party datasets, pretrained weights and source-derived Supplementary Data are excluded from that licence.
 
-Evidence-revision additions: `scripts/audit_cbc_source.py`, `scripts/audit_maier_raw_labels.py`, `scripts/replay_cbc_controls.py`, `scripts/make_cbc_revision_figures.py`, `scripts/cbc_academic.mplstyle`, `docs/CBC_EVIDENCE.md`, and `docs/RF_FEASIBILITY_AMENDMENT.md`. `SHA256SUMS.csv` is generated for the submitted archive. The matching public code repository is https://github.com/BOYA1999/Leakage-Audited-Species-Level-Antimicrobial-MIC-Prediction-and-Independent.
+Evidence-revision additions: `scripts/audit_cbc_source.py`, `scripts/audit_maier_raw_labels.py`, `scripts/replay_cbc_controls.py`, `scripts/analyze_cbc_interactions.py`, `scripts/make_cbc_revision_figures.py`, `scripts/cbc_academic.mplstyle`, `docs/CBC_EVIDENCE.md`, and `docs/RF_FEASIBILITY_AMENDMENT.md`. `SHA256SUMS.csv` is generated for the submitted archive. The matching public code repository is https://github.com/BOYA1999/Leakage-Audited-Species-Level-Antimicrobial-MIC-Prediction-and-Independent.

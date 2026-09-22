@@ -1,6 +1,6 @@
 # Benchmarking molecular representations across generalization boundaries in species-level antimicrobial MIC prediction
 
-This repository and its submitted code archive contain the code used for the species-level MIC benchmark and the independent phenotypic-screen transfer analyses.
+This repository and its submitted code archive contain the code used for the species-level MIC benchmark and the external phenotypic-screen transfer analyses.
 
 The workflow covers:
 
@@ -10,7 +10,7 @@ The workflow covers:
 - species-balanced LightGBM regression, compound-only conditioning ablation, and pooled or species-wise residual-quantile intervals with empirical coverage evaluation;
 - secondary post hoc view ablation for Morgan plus physicochemical descriptors, MACCS keys, graph summaries, and the full multi-view representation;
 - exact-key, fingerprint-identity, standardized-parent-identity, and structural-similarity auditing in the Maier 40-strain screen;
-- pooled-versus-species-wise coverage audits, a secondary post hoc MIC replicate/IQR audit, paired bootstrap comparisons, and publication-figure generation;
+- pooled-versus-species-wise coverage audits, a secondary post hoc MIC replicate/IQR audit, direct estimator-by-representation contrasts, paired bootstrap comparisons, and publication-figure generation;
 - endpoint-specific E. coli exact-key, fingerprint-identity, and standardized-parent-identity audits;
 - prediction-verified reconstruction of the joint MIC models for two matched external species, with split-matched single-species and concentration-only controls;
 - matched Random Forest and XGBoost estimator baselines on the frozen five scaffold splits;
@@ -19,7 +19,7 @@ The workflow covers:
 
 This supplementary package contains code only. It excludes raw datasets, result tables, manuscripts, figures, model weights, embeddings, checkpoints and local run manifests.
 
-The 12 September 2026 evidence revision adds two fixed-prediction control replays and an activity-source audit; details are in `docs/CBC_EVIDENCE.md`. Identifier-linked predictions and sanitized run records are provided in the separate Supplementary Data archive submitted with the manuscript; they are not mirrored in this code repository. The public repository is https://github.com/BOYA1999/Leakage-Audited-Species-Level-Antimicrobial-MIC-Prediction-and-Independent.
+The 12 and 22 September 2026 evidence revisions add two fixed-prediction control replays, an activity-source audit, direct estimator and record-quality contrasts, and a full current-run RF100 numerical reproduction. The RF replay matched the frozen data, environment, metric contract and split fingerprints; machine-precision output differences are reported rather than described as bit-identical. Details are in `docs/CBC_EVIDENCE.md`. Identifier-linked predictions and sanitized run records are provided in the separate Supplementary Data archive submitted with the manuscript; they are not mirrored in this code repository. The public repository is https://github.com/BOYA1999/Leakage-Audited-Species-Level-Antimicrobial-MIC-Prediction-and-Independent.
 
 Historical `jcim_*` file names and identifiers are retained for compatibility with
 the frozen analysis outputs; they do not designate a target journal.
@@ -122,6 +122,12 @@ python -m amr_multiview.species_mic_jcim_baselines `
   --seeds 42 100 3544 2025 2026 `
   --n-estimators 300 `
   --xgb-device cuda
+
+# Direct estimator-by-representation and MIC record-quality contrasts
+python scripts/analyze_cbc_interactions.py `
+  --benchmark-by-seed <supplementary_data\tables\jcim_model_benchmark_by_seed.csv> `
+  --replicate-groups <supplementary_data\tables\mic_error_by_replicate_group.csv> `
+  --output-dir <interaction_results>
 
 # E02: repeat this block for seeds 42, 100, 3544, 2025, and 2026
 python -m amr_multiview.species_mic_chemprop prepare `

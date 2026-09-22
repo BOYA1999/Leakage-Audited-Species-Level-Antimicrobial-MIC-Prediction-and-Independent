@@ -48,7 +48,7 @@ The upstream MolE preparation computed `ExactMolWt` with `Descriptors.ExactMolWt
 
 The broad classifier is refitted on AntiMicrobial-KG. The original E. coli regressors are separate full-data single-species refits without a species indicator. The additional joint evaluation reconstructs the original joint models with prediction replay and compares split-matched single-species controls. The original separate external run used the pre-merged taxonomy dataset; the accepted-ID correction concerned Cryptococcus, and the E. coli training subset is unchanged. The joint reconstruction uses the final taxonomy-merged data. Its C. difficile endpoint is the one matched strain's inherited binary label.
 
-The upstream MolE preparation notebook `workflow/01.prepare_training_data.ipynb` sets `PVAL_CUTOFF=0.05` and converts the Maier adjusted-P-value matrix using `screen_df <= PVAL_CUTOFF`. This inherited label is a screening-effect criterion, not a clinical MIC breakpoint. `average_precision_score` computes the quantity reported as AUPRC throughout the manuscript.
+The upstream MolE preparation notebook `workflow/01.prepare_training_data.ipynb` sets `PVAL_CUTOFF=0.05` and converts the Maier adjusted-P-value matrix using `screen_df <= PVAL_CUTOFF`. This inherited label is a screening-effect criterion, not a clinical MIC breakpoint. The legacy result-column name `auprc` stores `average_precision_score`; the manuscript reports this quantity as average precision (AP), not trapezoidal area under a precision-recall curve.
 
 ## Excluded Materials
 
